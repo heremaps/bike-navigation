@@ -21,13 +21,15 @@ const int MATRIX_HEIGHT = 7;
 
 struct Icon
 {
-    Icon(int f_num, const char * f_ptr)
+    Icon(int f_num, const char * f_ptr, bool doubleSpeedFlag = false)
     : framesNum( f_num )
     , frames(f_ptr)
+    , doubleSpeed(doubleSpeedFlag)
     {}
 
     int framesNum;
     const char * frames;
+    bool doubleSpeed;
     char getRow(int frameNum, int rowNum) const
     {
       return *(frames + frameNum * MATRIX_HEIGHT + rowNum);
@@ -56,17 +58,6 @@ const char uturnRightFrames[][MATRIX_HEIGHT] = {
   {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
 };
 const Icon uturnRight(6, uturnRightFrames[0]);
-
-// 3 - uturn left
-const char uturnLeftFrames[][MATRIX_HEIGHT] = {
-  {0x00, 0x00, 0x02, 0x02, 0x02, 0x02, 0x02},
-  {0x00, 0x1c, 0x02, 0x02, 0x02, 0x02, 0x02},
-  {0x00, 0x1c, 0x22, 0x22, 0x22, 0x22, 0x22},
-  {0x00, 0x1c, 0x20, 0x20, 0x20, 0x20, 0x20},
-  {0x00, 0x00, 0x20, 0x20, 0x20, 0x20, 0x20},
-  {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
-};
-const Icon uturnLeft(6, uturnLeftFrames[0]);
 
  // 4 - keep right
 const char keepRightFrames[][MATRIX_HEIGHT] = {
@@ -97,30 +88,6 @@ const char keepMiddleFrames[][MATRIX_HEIGHT] = {
   {0x49, 0x2a, 0x08, 0x08, 0x00, 0x00, 0x00}
 };
 const Icon keepMiddle(1, keepMiddleFrames[0]);
-
- // 9 - keep left
-const char keepLeftFrames[][MATRIX_HEIGHT] = {
-  {0x20, 0x20, 0x20, 0x1c, 0x02, 0x02, 0x02}
-};
-const Icon keepLeft(1, keepLeftFrames[0]);
-
- // 10- light left
-const char lightLeftFrames[][MATRIX_HEIGHT] = {
-  {0x40, 0x20, 0x10, 0x08, 0x00, 0x00, 0x00}
-};
-const Icon lightLeft(1, lightLeftFrames[0]);
-
- // 11 - quite left
-const char quiteLeftFrames[][MATRIX_HEIGHT] = {
-  {0x78, 0x08, 0x08, 0x08, 0x00, 0x00, 0x00}
-};
-const Icon quiteLeft(1, quiteLeftFrames[0]);
-
- // 12 - heavy left
-const char heavyLeftFrames[][MATRIX_HEIGHT] = {
-  {0x08, 0x18, 0x28, 0x48, 0x00, 0x00, 0x00}
-};
-const Icon heavyLeft(1, heavyLeftFrames[0]);
 
   // 13 - start
 const char startFrames[][MATRIX_HEIGHT] = {
@@ -168,37 +135,6 @@ const char heavyRightSoonFrames[][MATRIX_HEIGHT] = {
 };
 const Icon heavyRightSoon(5, heavyRightSoonFrames[0]);
 
- // 23 - light left soon
-const char lightLeftSoonFrames[][MATRIX_HEIGHT] = {
-    {0x00, 0x20, 0x10, 0x08, 0x00, 0x00, 0x00},
-    {0x40, 0x00, 0x10, 0x08, 0x00, 0x00, 0x00},
-    {0x40, 0x20, 0x00, 0x08, 0x00, 0x00, 0x00},
-    {0x40, 0x20, 0x10, 0x00, 0x00, 0x00, 0x00}
-};
-const Icon lightLeftSoon(4, lightLeftSoonFrames[0]);
-
- // 24 - quite left soon
-const char quiteLeftSoonFrames[][MATRIX_HEIGHT] = {
-    {0x00, 0x78, 0x00, 0x08, 0x00, 0x00, 0x00},
-    {0x00, 0x70, 0x08, 0x08, 0x00, 0x00, 0x00},
-    {0x00, 0x68, 0x08, 0x08, 0x00, 0x00, 0x00},
-    {0x00, 0x58, 0x08, 0x08, 0x00, 0x00, 0x00},
-    {0x00, 0x38, 0x08, 0x08, 0x00, 0x00, 0x00},
-    {0x00, 0x78, 0x08, 0x08, 0x00, 0x00, 0x00},
-    {0x00, 0x78, 0x08, 0x00, 0x00, 0x00, 0x00}
-};
-const Icon quiteLeftSoon(7, quiteLeftSoonFrames[0]);
-
- // 25 - heavy left soon
-const char heavyLeftSoonFrames[][MATRIX_HEIGHT] = {
-    {0x00, 0x00, 0x00, 0x00, 0x10, 0x20, 0x40},
-    {0x00, 0x00, 0x00, 0x08, 0x00, 0x20, 0x40},
-    {0x00, 0x00, 0x00, 0x08, 0x10, 0x00, 0x40},
-    {0x00, 0x00, 0x00, 0x08, 0x10, 0x20, 0x00},
-    {0x00, 0x00, 0x00, 0x08, 0x10, 0x20, 0x40}
-};
-const Icon heavyLeftSoon(5, heavyLeftSoonFrames[0]);
-
  // 26 - light right now
 const char lightRightNowFrames[][MATRIX_HEIGHT] = {
     {0x00, 0x02, 0x04, 0x08, 0x00, 0x00, 0x00},
@@ -206,7 +142,7 @@ const char lightRightNowFrames[][MATRIX_HEIGHT] = {
     {0x01, 0x02, 0x00, 0x08, 0x00, 0x00, 0x00},
     {0x01, 0x02, 0x04, 0x00, 0x00, 0x00, 0x00}
 };
-const Icon lightRightNow(4, lightRightNowFrames[0]);
+const Icon lightRightNow(4, lightRightNowFrames[0], true);
 
  // 27 - quite right now
 const char quiteRightNowFrames[][MATRIX_HEIGHT] = {
@@ -218,7 +154,7 @@ const char quiteRightNowFrames[][MATRIX_HEIGHT] = {
     {0x00, 0x0e, 0x08, 0x08, 0x00, 0x00, 0x00},
     {0x00, 0x0f, 0x08, 0x08, 0x00, 0x00, 0x00}
 };
-const Icon quiteRightNow(7, quiteRightNowFrames[0]);
+const Icon quiteRightNow(7, quiteRightNowFrames[0], true);
 
  // 28 - heavy right now
 const char heavyRightNowFrames[][MATRIX_HEIGHT] = {
@@ -228,38 +164,8 @@ const char heavyRightNowFrames[][MATRIX_HEIGHT] = {
     {0x00, 0x00, 0x00, 0x08, 0x04, 0x02, 0x00},
     {0x00, 0x00, 0x00, 0x08, 0x04, 0x02, 0x01}
 };
-const Icon heavyRightNow(5, heavyRightNowFrames[0]);
+const Icon heavyRightNow(5, heavyRightNowFrames[0], true);
 
- // 29 - light left now
-const char lightLeftNowFrames[][MATRIX_HEIGHT] = {
-    {0x00, 0x20, 0x10, 0x08, 0x00, 0x00, 0x00},
-    {0x40, 0x00, 0x10, 0x08, 0x00, 0x00, 0x00},
-    {0x40, 0x20, 0x00, 0x08, 0x00, 0x00, 0x00},
-    {0x40, 0x20, 0x10, 0x00, 0x00, 0x00, 0x00}
-};
-const Icon lightLeftNow(4, lightLeftNowFrames[0]);
-
- // 30 - quite left now
-const char quiteLeftNowFrames[][MATRIX_HEIGHT] = {
-    {0x00, 0x78, 0x00, 0x08, 0x00, 0x00, 0x00},
-    {0x00, 0x70, 0x08, 0x08, 0x00, 0x00, 0x00},
-    {0x00, 0x68, 0x08, 0x08, 0x00, 0x00, 0x00},
-    {0x00, 0x58, 0x08, 0x08, 0x00, 0x00, 0x00},
-    {0x00, 0x38, 0x08, 0x08, 0x00, 0x00, 0x00},
-    {0x00, 0x78, 0x08, 0x08, 0x00, 0x00, 0x00},
-    {0x00, 0x78, 0x08, 0x00, 0x00, 0x00, 0x00}
-};
-const Icon quiteLeftNow(7, quiteLeftNowFrames[0]);
-
- // 31 - heavy left now
-const char heavyLeftNowFrames[][MATRIX_HEIGHT] = {
-    {0x00, 0x00, 0x00, 0x00, 0x10, 0x20, 0x40},
-    {0x00, 0x00, 0x00, 0x08, 0x00, 0x20, 0x40},
-    {0x00, 0x00, 0x00, 0x08, 0x10, 0x00, 0x40},
-    {0x00, 0x00, 0x00, 0x08, 0x10, 0x20, 0x00},
-    {0x00, 0x00, 0x00, 0x08, 0x10, 0x20, 0x40}
-};
-const Icon heavyLeftNow(5, heavyLeftNowFrames[0]);
 
  // 32 - keep right soon
 const char keepRightSoonFrames[][MATRIX_HEIGHT] = {
@@ -289,37 +195,7 @@ const char keepRightNowFrames[][MATRIX_HEIGHT] = {
     {0x00, 0x02, 0x02, 0x1c, 0x20, 0x20, 0x20},
     {0x02, 0x02, 0x02, 0x1c, 0x20, 0x20, 0x20}
 };
-const Icon keepRightNow(10, keepRightNowFrames[0]);
-
- // 34 - keep left soon
-const char keepLeftSoonFrames[][MATRIX_HEIGHT] = {
-    {0x20, 0x20, 0x20, 0x1c, 0x02, 0x02, 0x00},
-    {0x20, 0x20, 0x20, 0x1c, 0x02, 0x00, 0x02},
-    {0x20, 0x20, 0x20, 0x1c, 0x00, 0x02, 0x02},
-    {0x20, 0x20, 0x20, 0x18, 0x02, 0x02, 0x02},
-    {0x20, 0x20, 0x20, 0x14, 0x02, 0x02, 0x02},
-    {0x20, 0x20, 0x20, 0x0c, 0x02, 0x02, 0x02},
-    {0x20, 0x20, 0x00, 0x1c, 0x02, 0x02, 0x02},
-    {0x20, 0x00, 0x20, 0x1c, 0x02, 0x02, 0x02},
-    {0x00, 0x20, 0x20, 0x1c, 0x02, 0x02, 0x02},
-    {0x20, 0x20, 0x20, 0x1c, 0x02, 0x02, 0x02}
-};
-const Icon keepLeftSoon(10, keepLeftSoonFrames[0]);
-
- // 35 - keep left now
-const char keepLeftNowFrames[][MATRIX_HEIGHT] = {
-    {0x20, 0x20, 0x20, 0x1c, 0x02, 0x02, 0x00},
-    {0x20, 0x20, 0x20, 0x1c, 0x02, 0x00, 0x02},
-    {0x20, 0x20, 0x20, 0x1c, 0x00, 0x02, 0x02},
-    {0x20, 0x20, 0x20, 0x18, 0x02, 0x02, 0x02},
-    {0x20, 0x20, 0x20, 0x14, 0x02, 0x02, 0x02},
-    {0x20, 0x20, 0x20, 0x0c, 0x02, 0x02, 0x02},
-    {0x20, 0x20, 0x00, 0x1c, 0x02, 0x02, 0x02},
-    {0x20, 0x00, 0x20, 0x1c, 0x02, 0x02, 0x02},
-    {0x00, 0x20, 0x20, 0x1c, 0x02, 0x02, 0x02},
-    {0x20, 0x20, 0x20, 0x1c, 0x02, 0x02, 0x02}
-};
-const Icon keepLeftNow(10, keepLeftNowFrames[0]);
+const Icon keepRightNow(10, keepRightNowFrames[0], true);
 
 //40 - heading 0
 const char heading0Frames[][MATRIX_HEIGHT] = {
@@ -351,25 +227,6 @@ const char heading180Frames[][MATRIX_HEIGHT] = {
 };
 const Icon heading180(1, heading180Frames[0]);
 
-//45 - heading 225
-const char heading225Frames[][MATRIX_HEIGHT] = {
-    {0x00, 0x00, 0x00, 0x08, 0x10, 0x20, 0x40}
-};
-const Icon heading225(1, heading225Frames[0]);
-
-//46 - heading 270
-const char heading270Frames[][MATRIX_HEIGHT] = {
-    {0x00, 0x00, 0x00, 0x78, 0x00, 0x00, 0x00}
-};
-const Icon heading270(1, heading270Frames[0]);
-
-//47 - heading 315
-
-const char heading315Frames[][MATRIX_HEIGHT] = {
-    {0x40, 0x20, 0x10, 0x08, 0x00, 0x00, 0x00}
-};
-const Icon heading315(1, heading315Frames[0]);
-
   //60 - gps lost
 const char gpsLostFrames[][MATRIX_HEIGHT] = {
     {0x00, 0x1c, 0x20, 0x2e, 0x22, 0x1c, 0x00}
@@ -388,127 +245,221 @@ const char onFrames[][MATRIX_HEIGHT] = {
 };
 const Icon on(1, onFrames[0]);
 
-
-const Icon * icons [] = {
-  &undefined,  // 0
-  &goStraight, // 1
-  &uturnRight, // 2
-  &uturnLeft,  // 3
-  &keepRight,  // 4
-  &lightRight, // 5
-  &quiteRight, // 6
-  &heavyRight, // 7
-  &keepMiddle, // 8
-  &keepLeft,   // 9
-  &lightLeft,  // 10
-  &quiteLeft,  // 11
-  &heavyLeft,  // 12
-  &start,      // 13
-  &finish,     // 14
-
-  &lightRightSoon, // 15
-  &quiteRightSoon, // 16
-  &heavyRightSoon, // 17
-  &lightLeftSoon,  // 18
-  &quiteLeftSoon,  // 19
-  &heavyLeftSoon,  // 20
-  &lightRightNow,  // 21
-  &quiteRightNow,  // 22
-  &heavyRightNow,  // 23
-  &lightLeftNow,   // 24
-  &quiteLeftNow,   // 25
-  &heavyLeftNow,   // 26
-  &keepRightSoon,  // 27
-  &keepRightNow,   // 28
-  &keepLeftSoon,   // 29
-  &keepLeftNow,    // 30
-
-  &heading0,  // 31
-  &heading45, // 32
-  &heading90, // 33
-  &heading135,// 34
-  &heading180,// 35
-  &heading225,// 36
-  &heading270,// 37
-  &heading315,// 38
-
-  &gpsLost,  // 39
-  &reroute,  // 40
-
-  &on        // 41
-};
-
-const int DOUBLE_SPEED_ANIMATIONS [] = {21, 22, 23, 24, 25, 26, 28, 30};
-
-bool isDoubleSpeedAnimation(int code)
-{
-  int length = sizeof(DOUBLE_SPEED_ANIMATIONS) / sizeof(DOUBLE_SPEED_ANIMATIONS[0]);
-  for (int i = 0; i < length; i++)
-  {
-    if(code == DOUBLE_SPEED_ANIMATIONS[i])
-    {
-      return true;
-    }
-  }
-  return false;
-}
-
 const int MANEUVER_CODES_START = 0;
 
 const int MANEUVER_DISTANCE_CODES_START = 20;
-const int MANEUVER_DISTANCE_CODES_INTERNAL_START = 15;
 
 
 const int HEADING_CODES_START = 40;
 const int HEADING_CODES_END = 47;
-const int HEADING_CODES_INTERNAL_START = 31;
 
 const int GUIDANCE_CODES_START = 60;
-const int GUIDANCE_CODES_INTERNAL_START = 39;
 
 const int BLE_CODES_START = 70;
 
 const int SPECIAL_CODES_START = 80;
-const int SPECIAL_CODES_INTERNAL_START = 41;
+
+enum InputCodes
+{
+  UNDEFINED = MANEUVER_CODES_START,
+  GO_STRAIGHT,
+  UTURN_RIGHT,
+  UTURN_LEFT,
+  KEEP_RIGHT,
+  LIGHT_RIGHT,
+  QUITE_RIGHT,
+  HEAVY_RIGHT,
+  KEEP_MIDDLE,
+  KEEP_LEFT,
+  LIGHT_LEFT,
+  QUITE_LEFT,
+  HEAVY_LEFT,
+  START,
+  FINISH,
+  LIGHT_RIGHT_SOON = MANEUVER_DISTANCE_CODES_START,
+  QUITE_RIGHT_SOON,
+  HEAVY_RIGHT_SOON,
+  LIGHT_LEFT_SOON,
+  QUITE_LEFT_SOON,
+  HEAVY_LEFT_SOON,
+  LIGHT_RIGHT_NOW,
+  QUITE_RIGHT_NOW,
+  HEAVY_RIGHT_NOW,
+  LIGHT_LEFT_NOW,
+  QUITE_LEFT_NOW,
+  HEAVY_LEFT_NOW,
+  KEEP_RIGHT_SOON,
+  KEEP_RIGHT_NOW,
+  KEEP_LEFT_SOON,
+  KEEP_LEFT_NOW,
+  HEADING0 = HEADING_CODES_START,
+  HEADING45,
+  HEADING90,
+  HEADING135,
+  HEADING180,
+  HEADING225,
+  HEADING270,
+  HEADING315,
+  GPS_LOST = GUIDANCE_CODES_START,
+  REROUTE,
+  ON = SPECIAL_CODES_START
+};
+
 
 bool isHeadingCommand(int code)
 {
   return code >= HEADING_CODES_START && code <= HEADING_CODES_END;
 }
 
-int convertCommandToIcon(int code)
+const Icon * convertCommandToIcon(int code, bool& mirrored)
 {
-  if(code >= MANEUVER_CODES_START && code < MANEUVER_DISTANCE_CODES_START)
+  const Icon * ret = NULL;
+  mirrored = false;
+  switch(code)
   {
-    //maneuver codes
-    return code;
+    case UNDEFINED:
+      ret = &undefined;
+      break;
+    case GO_STRAIGHT:
+      ret = &goStraight;
+      break;
+    case UTURN_RIGHT:
+      ret = &uturnRight;
+      break;
+    case UTURN_LEFT:
+      mirrored = true;
+      ret = &uturnRight;
+      break;
+    case KEEP_RIGHT:
+      ret = &keepRight;
+      break;
+    case LIGHT_RIGHT:
+      ret = &lightRight;
+      break;
+    case QUITE_RIGHT:
+      ret = &quiteRight;
+      break;
+    case HEAVY_RIGHT:  
+      ret = &heavyRight;
+      break;
+    case KEEP_MIDDLE:
+      ret = &keepMiddle;
+      break;
+    case KEEP_LEFT:
+      mirrored = true;
+      ret = &keepRight;
+      break;
+    case LIGHT_LEFT:
+      mirrored = true;
+      ret = &lightRight;
+      break;
+    case QUITE_LEFT:
+      mirrored = true;
+      ret = &quiteRight;
+      break;
+    case HEAVY_LEFT:
+      mirrored = true;
+      ret = &heavyRight;
+      break;
+    case START:
+      ret = &start;
+      break;
+    case FINISH:
+      ret = &finish;
+      break;
+    case LIGHT_RIGHT_SOON:
+      ret = &lightRightSoon;
+      break;
+    case QUITE_RIGHT_SOON:
+      ret = &quiteRightSoon;
+      break;
+    case HEAVY_RIGHT_SOON:
+      ret = &heavyRightSoon;
+      break;
+    case LIGHT_LEFT_SOON:
+      mirrored = true;
+      ret = &lightRightSoon;
+      break;
+    case QUITE_LEFT_SOON:
+      mirrored = true;
+      ret = &quiteRightSoon;
+      break;
+    case HEAVY_LEFT_SOON:
+      mirrored = true;
+      ret = &heavyRightSoon;
+      break;
+    case LIGHT_RIGHT_NOW:
+      ret = &lightRightNow;
+      break;
+    case QUITE_RIGHT_NOW:
+      ret = &quiteRightNow;
+      break;
+    case HEAVY_RIGHT_NOW:
+      ret = &heavyRightNow;
+      break;
+    case LIGHT_LEFT_NOW:
+      mirrored = true;
+      ret = &lightRightNow;
+      break;
+    case QUITE_LEFT_NOW:
+      mirrored = true;  
+      ret = &quiteRightNow;
+      break;
+    case HEAVY_LEFT_NOW:
+      mirrored = true;
+      ret = &heavyRightNow;
+      break;
+    case KEEP_RIGHT_SOON:
+      ret = &keepRightSoon;
+      break;
+    case KEEP_RIGHT_NOW:
+      ret = &keepRightNow;
+      break;
+    case KEEP_LEFT_SOON:
+      mirrored = true;
+      ret = &keepRightSoon;
+      break;
+    case KEEP_LEFT_NOW:
+      mirrored = true;
+      ret = &keepRightNow;
+      break;
+    case HEADING0:
+      ret = &heading0;
+      break;
+    case HEADING45:
+      ret = &heading45;
+      break;
+    case HEADING90:
+      ret = &heading90;
+      break;
+    case HEADING135:
+      ret = &heading135;
+      break;
+    case HEADING180:
+      ret = &heading180;
+      break;
+    case HEADING225:
+      mirrored = true;
+      ret = &heading135;
+      break;
+    case HEADING270:
+      mirrored = true;
+      ret = &heading90;
+      break;
+    case HEADING315:
+      mirrored = true;
+      ret = &heading45;
+      break;
+    case GPS_LOST:
+      ret = &gpsLost;
+      break;
+    case REROUTE:
+      ret = &reroute;
+      break;
+    case ON:
+      ret = &on;
+      break;
   }
-  else if(code < HEADING_CODES_START)
-  {
-    //maneuver with distance codes
-    return code - MANEUVER_DISTANCE_CODES_START + MANEUVER_DISTANCE_CODES_INTERNAL_START;
-  }
-  else if(code < GUIDANCE_CODES_START)
-  {
-    //heading codes - should be processed according compass measurements
-    return code;
-  }
-  else if(code < BLE_CODES_START)
-  {
-    //guidance codes
-    return code - GUIDANCE_CODES_START + GUIDANCE_CODES_INTERNAL_START;
-  }
-  else if(code < SPECIAL_CODES_START)
-  {
-    //Ble codes - no icons yet
-    return 0;
-  }
-  else
-  {
-    //special codes - shouldn't be used as input commands
-    return code - SPECIAL_CODES_START + SPECIAL_CODES_INTERNAL_START;
-  }
-
+  return ret;
 }
 
-#define NUM_BASIC_SYMBOLS (sizeof(icons)/sizeof(icons[0]))

@@ -30,15 +30,15 @@ static const int oePin = 13;
 Compass compass;
 
 boolean initialized = false;
-int lastIcon = 0;
-int newIcon = 0;
+
+
 int command = 80; //Icon start
+int lastShownCommand = 80; //Icon start
 
 static void processBle()
 {
   while (Serial1.available()) {
     byte symb = Serial1.read();
-    Serial.write(symb);
 
     if (initialized)
     {
@@ -65,7 +65,7 @@ void setup() {
 
   Serial1.begin(115200);
   delay(100);
-  Serial.print("Starting up");
+  Serial.print("Starting up\n");
 
   bleSend("AT");
   bleSend("AT+NAMEbikeN");
@@ -86,59 +86,72 @@ static int currentFrameNum = 0;
 static int frameCounter = 0;
 const int FRAME_DELAY = 100;
 int currentFrameDelay = FRAME_DELAY;
+bool curMirrored = false;
+const Icon * curIconPtr = &on;
+
 
 void loop() {
   processBle();
-  if( isHeadingCommand(command) )
+  int commandToShow = command;
+  if( isHeadingCommand(command))
   {
+    
     //check the compass to get correct heading icon
-    newIcon = getHeadingIcon(command);
+    commandToShow = tuneHeadingWithCompass(command);
   }
-  else
+  
+  if(commandToShow != lastShownCommand)  
   {
-    newIcon = convertCommandToIcon(command);
-  }
-  if(newIcon != lastIcon && newIcon < NUM_BASIC_SYMBOLS)
-  {
-    lastIcon = newIcon;
-    frameCounter = 0;
-    currentFrameNum = 0;
-    if(isDoubleSpeedAnimation(newIcon))
+    bool mirrored = false;
+    const Icon * iconPtr = convertCommandToIcon(commandToShow, mirrored);
+    if( iconPtr != NULL )
     {
-      currentFrameDelay = FRAME_DELAY / 2;
-    }
-    else
-    {
-      currentFrameDelay = FRAME_DELAY;
-    }
-  }
-  else
-  {
-    if(frameCounter >= currentFrameDelay)
-    {
-      //switch to next frame and clear animation counter
+      lastShownCommand = commandToShow;
+      curMirrored = mirrored;
+      curIconPtr = iconPtr;
+    
       frameCounter = 0;
-      currentFrameNum++;
-      if(currentFrameNum == icons[lastIcon]->framesNum)
+      currentFrameNum = 0;
+      if(curIconPtr->doubleSpeed)
       {
-        currentFrameNum = 0;
+        currentFrameDelay = FRAME_DELAY / 2;
+      }
+      else
+      {
+        currentFrameDelay = FRAME_DELAY;
       }
     }
-    showSymbol(lastIcon, currentFrameNum);
-    frameCounter++;
+    else 
+    {
+      command = lastShownCommand;
+    }
   }
+
+  if(frameCounter >= currentFrameDelay)
+  {
+    //switch to next frame and clear animation counter
+    frameCounter = 0;
+    currentFrameNum++;
+    if(currentFrameNum == curIconPtr->framesNum)
+    {
+      currentFrameNum = 0;
+    }
+  }
+  frameCounter++;
+
+  showSymbol(curIconPtr, currentFrameNum, curMirrored);
 }
 
 /* Shows a symbol with the given encoding */
-void showSymbol(byte code, int frameNum)
+void showSymbol(const Icon * icon, int frameNum, boolean mirrored)
 {
   for (int row = 0; row < MATRIX_HEIGHT; row++) {
     byte columnBitsToSend = 0;
     byte rowBitsToSend = 1 << row;
 
     for (int col = 0; col < MATRIX_WIDTH; col++) {
-      if (icons[code]->getRow(frameNum, row) & (1 << col)) {
-        bitWrite(columnBitsToSend, 6 - col, HIGH);
+      if (icon->getRow(frameNum, row) & (1 << col)) {
+        bitWrite(columnBitsToSend, mirrored? col : (6 - col), HIGH);
       }
     }
 
@@ -154,10 +167,10 @@ void showSymbol(byte code, int frameNum)
   digitalWrite(latchPin, HIGH);
 }
 
-int getHeadingIcon(int command)
+int tuneHeadingWithCompass(int directionCommand)
 {
   //convert command to desired direction
-  float dir = (command - HEADING_CODES_START) * 45;
+  float dir = (directionCommand - HEADING_CODES_START) * 45;
 
   //add compass value
   dir += compass.getDirection();
@@ -166,23 +179,39 @@ int getHeadingIcon(int command)
   {
     dir -= 360;
   }
-
-  int icon = 0;
+ 
+  int retCommand = 0;
   if ((dir > 337.5) || (dir <= 22.5))
-    icon = HEADING_CODES_INTERNAL_START; // 0
+  {
+    retCommand = HEADING_CODES_START; // 0
+  }
   else if (dir <= 67.5)
-    icon = HEADING_CODES_INTERNAL_START + 1; //45
+  {
+    retCommand = HEADING_CODES_START + 1; //45
+  }
   else if (dir <= 112.5)
-    icon = HEADING_CODES_INTERNAL_START + 2; //90
+  {
+    retCommand = HEADING_CODES_START + 2; //90
+  }
   else if (dir <= 157.5)
-    icon = HEADING_CODES_INTERNAL_START + 3; //135
+  {
+    retCommand = HEADING_CODES_START + 3; //135
+  }
   else if (dir <= 202.5)
-    icon = HEADING_CODES_INTERNAL_START + 4; //180
+  {
+    retCommand = HEADING_CODES_START + 4; //180
+  }
   else if (dir <= 247.5)
-    icon = HEADING_CODES_INTERNAL_START + 5; //225
+  {
+    retCommand = HEADING_CODES_START + 5; //225
+  }
   else if (dir <= 292.5)
-    icon = HEADING_CODES_INTERNAL_START + 6; //270
+  {
+    retCommand = HEADING_CODES_START + 6; //270
+  }
   else
-    icon = HEADING_CODES_INTERNAL_START + 7;//315
-  return icon;
+  {
+    retCommand = HEADING_CODES_START + 7;//315
+  }
+  return retCommand;
 }
