@@ -7,9 +7,8 @@ BikeNavigation BLE profile enables GATT client to send turn-by-turn navigation i
 BikeNavigation profile consists of single BikeNavigation service with single write characteristic.
 
 ### BikeNavigation service specifications:
-|  | |
-|:-|:-|
 |**Name**|BikeNavigation
+|:---|:---|
 |**Type**|Custom
 |**UUID**|FED0
 |**Description**|This service implements data consumer to be used by a navigation companion or extended display.
@@ -18,9 +17,8 @@ BikeNavigation profile consists of single BikeNavigation service with single wri
 |**Service Characteristics**|BikeNavigation Icon
 
 ### BikeNavigation Icon characteristic specifications:
-|  | |
-|:-|:-|
 |**Name**|BikeNavigation Icon
+|:---|:---|
 |**Type**|Custom
 |**UUID**|FED1
 |**Requirement**|Mandatory
@@ -31,8 +29,8 @@ BikeNavigation profile consists of single BikeNavigation service with single wri
 |**Value Fields**|icon ```Mandatory```
 
 ### icon value field specifications:
-|  | |
-|:-|:-|
+| | |
+|:---|:---|
 |**Requirement**|Mandatory
 |**Format**|[8bit](https://developer.bluetooth.org/gatt/Pages/FormatTypes.aspx)
 |**Minimum Value**|0x00
@@ -40,8 +38,8 @@ BikeNavigation profile consists of single BikeNavigation service with single wri
 
 **Value mapping**:
 
-| value | icon  
-| :---- |:----|
+|value|icon  
+|:---|:---|
 |0|undefined
 |1|straight
 |2|right u-turn
