@@ -2536,7 +2536,7 @@ Your Eurocircuits Team
 <attribute name="NAME" x="10.541" y="14.4526" size="0.6096" layer="25" rot="R180"/>
 <attribute name="VALUE" x="12.2174" y="15.9258" size="1.27" layer="27" rot="R180"/>
 </element>
-<element name="IC1" library="BikeNavigation" package="TSSOP24" value="STP16CP05" x="7.3152" y="21.1836" smashed="yes">
+<element name="IC2" library="BikeNavigation" package="TSSOP24" value="STP16CP05" x="7.3152" y="21.1836" smashed="yes">
 <attribute name="NAME" x="3.2466" y="20.2438" size="0.6096" layer="25" font="vector" ratio="9" rot="R90"/>
 <attribute name="VALUE" x="12.5014" y="19.1008" size="1.27" layer="27" font="vector" ratio="9" rot="R90"/>
 </element>
