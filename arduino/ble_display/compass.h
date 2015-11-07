@@ -19,19 +19,24 @@
 #include <Arduino.h>
 #include <Wire.h>
 
+/* Struct that stores one portion of compass measurements */
 struct CompassVec {
-  float x, y, z;
+  /* Default constructor */
   CompassVec() : x(0), y(0), z(0) {}
+  /* Constructor with compass measurements as parameters */
   CompassVec(float x, float y, float z) : x(x), y(y), z(z) {}
 
+  /* Returns CompassVec struct with the smallest values of two compass measurements */ 
   CompassVec minVec(const CompassVec &other) {
     return CompassVec(min(x, other.x), min(y, other.y), min(z, other.z));
   }
 
+  /* Returns CompassVec struct with the biggest values of two compass measurements */ 
   CompassVec maxVec(const CompassVec &other) {
     return CompassVec(max(x, other.x), max(y, other.y), max(z, other.z));
   }
 
+  /* Prints compass measurements to serial port */ 
   void print() {
     Serial.print(x);
     Serial.print(" ");
@@ -39,18 +44,26 @@ struct CompassVec {
     Serial.print(" ");
     Serial.print(z);
   }
+  
+  /* Compass measurements */ 
+  float x, y, z;
 };
 
 class Compass {
 public:
+  /* Default constructor */
   Compass();
+  /* Compass initialization. Should be called before using the compass */
   void setup();
 
+  /* Returns current direction in grads (0 grads equals direction - North) */
   float getDirection();
+  /* Prints calibration values for compass to serial port. */
   void doCalibration();
 private:
-  CompassVec maxMeas, minMeas;
   CompassVec getMeasurements();
   CompassVec applyCalibration(const CompassVec &v) const;
+  
+  CompassVec maxMeas, minMeas;
 
 };

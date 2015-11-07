@@ -16,25 +16,76 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <Wire.h>
+// Uncomment this to be able to use serial monitor in Arduino IDE
+//#define SEARIAL_MONITOR
 
-#include "icons.h"
+#include <Wire.h> // Needed for compass to work
+
+#include "icons.h" 
 #include "compass.h"
 
-// sketch for BikeNavigation
-static const int latchPin = 16;
-static const int clockPin = 15;
-static const int dataPin = 12;
-static const int oePin = 13;
+/* Constants needed in the board initialization */
+const int LATCH_PIN = 16;
+const int CLOCK_PIN = 15;
+const int DATA_PIN = 12;
+const int OE_PIN = 13;
+const int BLUETOOTH_SERIAL_SPEED = 115200;
 
-Compass compass;
+/* Default animation speed */
+const int FRAME_DELAY = 100;
 
-boolean initialized = false;
+/* Sends a command to the Bluetooth controller via serial port */
+static void bleSend(String s)
+{
+  Serial1.print(s);
+  delay(100);
+  processBle();
+}
 
+/* Flag that shows that board is initialized */
+static boolean initialized = false;
+/* Object to work with compass */
+static Compass compass;
 
-int command = 80; //Icon start
-int lastShownCommand = 80; //Icon start
+/* Board initialization. It's called once on the startup */
+void setup() 
+{
+  pinMode(LATCH_PIN, OUTPUT);
+  pinMode(CLOCK_PIN, OUTPUT);
+  pinMode(DATA_PIN, OUTPUT);
+  pinMode(OE_PIN, OUTPUT);
+  digitalWrite(OE_PIN, LOW);
 
+#ifdef SERIAL_MONITOR
+  while(!Serial.available());
+#endif
+
+  Serial1.begin(BLUETOOTH_SERIAL_SPEED);
+  delay(100);
+  Serial.print("Starting up\n");
+
+  bleSend("AT");
+  bleSend("AT+NAMEbikeN");
+  bleSend("AT+UUID0xFED0");
+  bleSend("AT+CHAR0xFED1");
+  bleSend("AT+ROLE0");
+
+  //Skip any junk returned by the AT commands 
+  delay(100);
+  processBle();
+
+  compass.setup();
+
+  initialized = true;
+}
+
+/* Stores last read command from the Bluetooth controller */
+static int command = ON; 
+
+/* Stores last shown command got from the Bluetooth controller */
+static int lastShownCommand = ON;
+
+/* Reads a byte from the Bluetooth controller via serial port */
 static void processBle()
 {
   while (Serial1.available()) {
@@ -47,55 +98,19 @@ static void processBle()
   }
 }
 
-static void bleSend(String s)
-{
-  Serial1.print(s);
-  delay(100);
-  processBle();
-}
-
-void setup() {
-  pinMode(latchPin, OUTPUT);
-  pinMode(clockPin, OUTPUT);
-  pinMode(dataPin, OUTPUT);
-  pinMode(oePin, OUTPUT);
-  digitalWrite(oePin, LOW);
-
-  //while(!Serial.available());
-
-  Serial1.begin(115200);
-  delay(100);
-  Serial.print("Starting up\n");
-
-  bleSend("AT");
-  bleSend("AT+NAMEbikeN");
-  bleSend("AT+UUID0xFED0");
-  bleSend("AT+CHAR0xFED1");
-  bleSend("AT+ROLE0");
-
-  /* Skip any junk returned by the AT commands */
-  delay(100);
-  processBle();
-
-  compass.setup();
-
-  initialized = true;
-}
-
+/* Global variables to handle frame changes during the animation */
 static int currentFrameNum = 0;
 static int frameCounter = 0;
-const int FRAME_DELAY = 100;
-int currentFrameDelay = FRAME_DELAY;
-bool curMirrored = false;
-const Icon * curIconPtr = &on;
+static int currentFrameDelay = FRAME_DELAY;
+static bool curMirrored = false;
+static const Icon * curIconPtr = &on;
 
-
+/* Main loop */
 void loop() {
   processBle();
   int commandToShow = command;
   if( isHeadingCommand(command))
   {
-    
     //check the compass to get correct heading icon
     commandToShow = tuneHeadingWithCompass(command);
   }
@@ -142,7 +157,7 @@ void loop() {
   showSymbol(curIconPtr, currentFrameNum, curMirrored);
 }
 
-/* Shows a symbol with the given encoding */
+/* Shows an icon on the matrix */
 void showSymbol(const Icon * icon, int frameNum, boolean mirrored)
 {
   for (int row = 0; row < MATRIX_HEIGHT; row++) {
@@ -155,18 +170,19 @@ void showSymbol(const Icon * icon, int frameNum, boolean mirrored)
       }
     }
 
-    digitalWrite(latchPin, LOW);
-    shiftOut(dataPin, clockPin, MSBFIRST, rowBitsToSend);
-    shiftOut(dataPin, clockPin, MSBFIRST, columnBitsToSend);
-    digitalWrite(latchPin, HIGH);
+    digitalWrite(LATCH_PIN, LOW);
+    shiftOut(DATA_PIN, CLOCK_PIN, MSBFIRST, rowBitsToSend);
+    shiftOut(DATA_PIN, CLOCK_PIN, MSBFIRST, columnBitsToSend);
+    digitalWrite(LATCH_PIN, HIGH);
   }
 
-  digitalWrite(latchPin, LOW);
-  shiftOut(dataPin, clockPin, MSBFIRST, 0);
-  shiftOut(dataPin, clockPin, MSBFIRST, 0);
-  digitalWrite(latchPin, HIGH);
+  digitalWrite(LATCH_PIN, LOW);
+  shiftOut(DATA_PIN, CLOCK_PIN, MSBFIRST, 0);
+  shiftOut(DATA_PIN, CLOCK_PIN, MSBFIRST, 0);
+  digitalWrite(LATCH_PIN, HIGH);
 }
 
+/* Checks the compass data and adapts heading command to show right direction according to compass */
 int tuneHeadingWithCompass(int directionCommand)
 {
   //convert command to desired direction
