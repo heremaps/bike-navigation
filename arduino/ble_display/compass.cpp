@@ -22,7 +22,8 @@
 #define COMPASS_REG_MODE 0x02
 #define COMPASS_REG_DATA_OUT_X 0x03
 
-//Helpers
+
+/* Helpers */
 
 void writeReg(byte reg, byte val)
 {
@@ -61,11 +62,11 @@ float correctVal(float v, float maxVal, float minVal)
   return (v - mean) / range * 2;
 }
 
-//Compass class code
+/* Compas class code */
 
 // FIXME correction values should be saved to the EEPROM
 Compass::Compass()
-  : maxMeas(258.00, 228.00, 294.00)
+  : maxMeas(258.00, 228.00, 294.00) 
   , minMeas(-244.00, -281.00, -210.00)
 {}
 

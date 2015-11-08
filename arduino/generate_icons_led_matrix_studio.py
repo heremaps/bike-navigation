@@ -61,6 +61,9 @@ def readRow(line):
 def main():
     if len(sys.argv) > 2:
         parseFile(sys.argv[1], sys.argv[2])
-
+    else:
+        print("Usage: %s filename outname" % sys.argv[0]) 
+        print("\tfilename: LED patterns file generated with LED Matrix Studio (http://maximumoctopus.com/electronics/builder.htm)")
+        print("\toutname: name of variable where LED patterns will be stored in C++ code")
 if __name__ == '__main__':
     main()
