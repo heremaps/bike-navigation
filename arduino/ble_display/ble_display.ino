@@ -26,7 +26,7 @@ const int LATCH_PIN = 16;
 const int CLOCK_PIN = 15;
 const int DATA_PIN = 12;
 const int OE_PIN = 13;
-const int BLUETOOTH_SERIAL_SPEED = 115200;
+const long BLUETOOTH_SERIAL_SPEED = 115200;
 
 /* Default animation speed */
 const int FRAME_DELAY = 100;
@@ -55,7 +55,6 @@ void setup()
 
   Serial1.begin(BLUETOOTH_SERIAL_SPEED);
   delay(100);
-  Serial.print("Starting up\n");
 
   bleSend("AT");
   bleSend("AT+NAMEbikeN");
