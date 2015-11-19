@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
- 
+
 /* Matrix dimensions */
 const int MATRIX_HEIGHT = 7;
 const int MATRIX_WIDTH = 7;
@@ -311,7 +311,7 @@ const char onFrames[][MATRIX_HEIGHT] = {
 };
 const Icon on(1, onFrames[0]);
 
-/* Converts incoming command code to the pointer to the object containing 
+/* Converts incoming command code to the pointer to the object containing
    all the needed information about the icon to show it. */
 const Icon * convertCommandToIcon(int code, bool& mirrored)
 {
@@ -341,7 +341,7 @@ const Icon * convertCommandToIcon(int code, bool& mirrored)
     case QUITE_RIGHT:
       ret = &quiteRight;
       break;
-    case HEAVY_RIGHT:  
+    case HEAVY_RIGHT:
       ret = &heavyRight;
       break;
     case KEEP_MIDDLE:
@@ -404,7 +404,7 @@ const Icon * convertCommandToIcon(int code, bool& mirrored)
       ret = &lightRightNow;
       break;
     case QUITE_LEFT_NOW:
-      mirrored = true;  
+      mirrored = true;
       ret = &quiteRightNow;
       break;
     case HEAVY_LEFT_NOW:

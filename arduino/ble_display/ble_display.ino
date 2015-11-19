@@ -16,12 +16,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-// Uncomment this to be able to use serial monitor in Arduino IDE
-//#define SEARIAL_MONITOR
-
 #include <Wire.h> // Needed for compass to work
 
-#include "icons.h" 
+#include "icons.h"
 #include "compass.h"
 
 /* Constants needed in the board initialization */
@@ -48,17 +45,13 @@ static boolean initialized = false;
 static Compass compass;
 
 /* Board initialization. It's called once on the startup */
-void setup() 
+void setup()
 {
   pinMode(LATCH_PIN, OUTPUT);
   pinMode(CLOCK_PIN, OUTPUT);
   pinMode(DATA_PIN, OUTPUT);
   pinMode(OE_PIN, OUTPUT);
   digitalWrite(OE_PIN, LOW);
-
-#ifdef SERIAL_MONITOR
-  while(!Serial.available());
-#endif
 
   Serial1.begin(BLUETOOTH_SERIAL_SPEED);
   delay(100);
@@ -70,7 +63,7 @@ void setup()
   bleSend("AT+CHAR0xFED1");
   bleSend("AT+ROLE0");
 
-  //Skip any junk returned by the AT commands 
+  //Skip any junk returned by the AT commands
   delay(100);
   processBle();
 
@@ -80,7 +73,7 @@ void setup()
 }
 
 /* Stores last read command from the Bluetooth controller */
-static int command = ON; 
+static int command = ON;
 
 /* Stores last shown command got from the Bluetooth controller */
 static int lastShownCommand = ON;
@@ -114,8 +107,8 @@ void loop() {
     //check the compass to get correct heading icon
     commandToShow = tuneHeadingWithCompass(command);
   }
-  
-  if(commandToShow != lastShownCommand)  
+
+  if(commandToShow != lastShownCommand)
   {
     bool mirrored = false;
     const Icon * iconPtr = convertCommandToIcon(commandToShow, mirrored);
@@ -124,7 +117,7 @@ void loop() {
       lastShownCommand = commandToShow;
       curMirrored = mirrored;
       curIconPtr = iconPtr;
-    
+
       frameCounter = 0;
       currentFrameNum = 0;
       if(curIconPtr->doubleSpeed)
@@ -136,7 +129,7 @@ void loop() {
         currentFrameDelay = FRAME_DELAY;
       }
     }
-    else 
+    else
     {
       command = lastShownCommand;
     }
@@ -195,7 +188,7 @@ int tuneHeadingWithCompass(int directionCommand)
   {
     dir -= 360;
   }
- 
+
   int retCommand = 0;
   if ((dir > 337.5) || (dir <= 22.5))
   {

@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
- 
+
 #include "compass.h"
 
 #define COMPASS_ADDRESS 0x1E
@@ -66,7 +66,7 @@ float correctVal(float v, float maxVal, float minVal)
 
 // FIXME correction values should be saved to the EEPROM
 Compass::Compass()
-  : maxMeas(258.00, 228.00, 294.00) 
+  : maxMeas(258.00, 228.00, 294.00)
   , minMeas(-244.00, -281.00, -210.00)
 {}
 
