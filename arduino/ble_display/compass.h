@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
- 
+
 #include <Arduino.h>
 #include <Wire.h>
 
@@ -26,17 +26,17 @@ struct CompassVec {
   /* Constructor with compass measurements as parameters */
   CompassVec(float x, float y, float z) : x(x), y(y), z(z) {}
 
-  /* Returns CompassVec struct with the smallest values of two compass measurements */ 
+  /* Returns CompassVec struct with the smallest values of two compass measurements */
   CompassVec minVec(const CompassVec &other) {
     return CompassVec(min(x, other.x), min(y, other.y), min(z, other.z));
   }
 
-  /* Returns CompassVec struct with the biggest values of two compass measurements */ 
+  /* Returns CompassVec struct with the biggest values of two compass measurements */
   CompassVec maxVec(const CompassVec &other) {
     return CompassVec(max(x, other.x), max(y, other.y), max(z, other.z));
   }
 
-  /* Prints compass measurements to serial port */ 
+  /* Prints compass measurements to serial port */
   void print() {
     Serial.print(x);
     Serial.print(" ");
@@ -44,8 +44,8 @@ struct CompassVec {
     Serial.print(" ");
     Serial.print(z);
   }
-  
-  /* Compass measurements */ 
+
+  /* Compass measurements */
   float x, y, z;
 };
 
@@ -63,7 +63,7 @@ public:
 private:
   CompassVec getMeasurements();
   CompassVec applyCalibration(const CompassVec &v) const;
-  
+
   CompassVec maxMeas, minMeas;
 
 };
