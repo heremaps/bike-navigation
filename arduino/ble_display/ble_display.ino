@@ -39,8 +39,6 @@ static void bleSend(String s)
   processBle();
 }
 
-/* Flag that shows that board is initialized */
-static boolean initialized = false;
 /* Object to work with compass */
 static Compass compass;
 
@@ -68,7 +66,6 @@ void setup()
 
   compass.setup();
 
-  initialized = true;
 }
 
 /* Stores last read command from the Bluetooth controller */
@@ -81,12 +78,7 @@ static int lastShownCommand = ON;
 static void processBle()
 {
   while (Serial1.available()) {
-    byte symb = Serial1.read();
-
-    if (initialized)
-    {
-      command = symb;
-    }
+    command = (byte)Serial1.read();
   }
 }
 
