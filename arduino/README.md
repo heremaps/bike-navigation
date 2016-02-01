@@ -1,6 +1,7 @@
 # BikeNavigation
 
 ## Arduino code
+
 Runs BikeNavigation BLE profile and controls LED matrix display.
 
 ### Arduino source files
@@ -22,22 +23,3 @@ Usage: ./generate\_icons\_led\_matrix\_studio.py filename outname
 	outname: name of variable where LED patterns will be stored in C++ code
 
 Generated code should be added to **icons.h** file. Also command codes and function converting command code to the icon should be adapted to the new code.
-
-
-## License
-
-Copyright (c) 2015 HERE Global B.V. and its affiliate(s).
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.

@@ -16,9 +16,6 @@ The bike navigation project was born out of the HERE maker lab in Berlin. A grou
 
 You are required to provide the end-user of the device with the following notice prior to use and are responsible to localize this notice according to local laws: “Focus on the traffic when using the device - your first consideration while using the device in traffic has to be safety.”
 
-
 ## Copyright
 
 Copyright (c) 2015 HERE Global B.V. and its affiliate(s).
-
-Appropriate licenses for each of the components are located in their respective directories.
