@@ -2,15 +2,12 @@
 
 The bike navigation project was born out of the HERE maker lab in Berlin. A group of employees volunteered their time to build a companion device that connects to the HERE app on Android, including an open-source toolkit to build a custom bike navigation device.
 
-## What's Included
+## Directory Contents
 
-**Arduino** - Codes implementing BikeNavigation BLE profile
-
-**PCB** - PCB Design files for BikeNavigation
-
-**Enclosure** - 3d and acrylic cases for BikeNavigation
-
-**BLE specs** - Documentation describing BikeNavigation BLE profile
+* *arduino*: Codes implementing BikeNavigation BLE profile
+* *ble_specs*: Documentation describing BikeNavigation BLE profile
+* *board*: PCB Design files for BikeNavigation
+* *enclosure*: 3d and acrylic cases for BikeNavigation
 
 ## Disclaimer
 
