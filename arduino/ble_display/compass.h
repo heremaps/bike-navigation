@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 HERE Global B.V. and its affiliate(s).
+ * Copyright (c) 2015 HERE Europe B.V.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
