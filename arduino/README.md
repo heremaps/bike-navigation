@@ -13,13 +13,13 @@ Runs BikeNavigation BLE profile and controls LED matrix display.
 
 ### Code generation script
 
-Python script `generate\_icons\_led\_matrix\_studio.py` can be used to convert the output of [LED Matrix Studio](http://maximumoctopus.com/electronics/builder.htm) to the C++ structures which can be used directly in code. Usage:
+Python script `generate_icons_led_matrix_studio.py` can be used to convert the output of [LED Matrix Studio](http://maximumoctopus.com/electronics/builder.htm) to the C++ structures which can be used directly in code. Usage:
 
-    ./generate\_icons\_led\_matrix\_studio.py filename outname
+    ./generate_icons_led_matrix_studio.py filename varname
 
 Where:
 
 * *filename*: LED patterns file generated with [LED Matrix Studio](http://maximumoctopus.com/electronics/builder.htm)
-* *outname*: name of variable where LED patterns will be stored in C++ code
+* *varname*: name of variable where LED patterns will be stored in C++ code
 
 Generated code should be added to `icons.h` file. Also command codes and function converting command code to the icon should be adapted to the new code.
