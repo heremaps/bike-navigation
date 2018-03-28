@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 HERE Europe B.V.
+ * Copyright (c) 2015-2018 HERE Europe B.V.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,8 +40,6 @@ void readRegs(byte reg, int count, byte *buf)
   Wire.endTransmission(false);
 
   Wire.requestFrom(COMPASS_ADDRESS, count);
-
-  while (Wire.available() != count) /* wait */;
 
   for (int i = 0; i < count; i++)
   {
