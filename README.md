@@ -1,3 +1,7 @@
+# This repository has been archived!
+
+The current version of the HERE WeGo app on Android does not support BLE devices anymore.
+
 # BikeNavigation
 
 The bike navigation project was born out of the HERE maker lab in Berlin. A group of employees volunteered their time to build a companion device that connects to the HERE app on Android, including an open-source toolkit to build a custom bike navigation device.
